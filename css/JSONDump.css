@@ -1,0 +1,37 @@
+.container {
+  margin: 0 auto;
+}
+
+body {
+    padding-top: 70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+
+}
+
+.result-item {
+    margin-bottom: 5px;
+    border: 1px solid;
+    text-align: center;
+}
+
+.centered-rows {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.result-item:hover {
+  background-color: #ccc;
+}
+
+.form-container {
+  margin: 0 auto;
+  text-align: center;
+}
+
+#api-url {
+    width: 80%;
+    margin-bottom: 5px;
+}
+
+footer {
+    margin: 50px 0;
+}
