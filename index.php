@@ -8,7 +8,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>API Dump with Pagination</title>
+  <title>JSON API Structure Inspector</title>
 
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="css/JSONDump.css" rel="stylesheet">
@@ -24,77 +24,88 @@
       </div>
       <div class="row">
         <input class="btn btn-info" type="submit" name="showKeys" value="Inspect Structure">
+        <!--
         <input class="btn btn-info" type="submit" name="submit" value="Show Cards">
-      </div>
-    </form>
-  </div>
-
-  <br>
-
-  <div class="form-container">
-    <h4>Show all keys?</h4>
-    <form method="POST" action="controllers\APIQuery.php">
-      <div class="row">
-        <input class="btn btn-info" type="submit" name="getKeyValPairs" value="Test Key Value Chain">
-      </div>
-    </form>
-  </div>
-
-  <!-- Page Content -->
-  <div class="container">
-    <!-- Page Heading -->
-    <div class="row">
-      <div class="col-lg-12">
-        <h1 class="page-header">Results
-          <small>pagination currently broken.</small>
-        </h1>
-      </div>
+      -->
     </div>
+  </form>
+</div>
 
-    <?php
-    if (isset($_SESSION['deals'])){
-      echo '<div class="centered-rows">';
-      echo '<div class="row">';
-      for ($i = 0; $i < count($_SESSION['deals']); $i++) {
-        $deal = $_SESSION['deals'][$i];
-        echo '<div class="col col-md-3 col-sm-6 col-xs-12 result-item"><p>'.$deal->id.'</p>'
-        .'<p>'.$deal->name.'</p>'.'<p>'.$deal->time.'</p></div>';
-        if (($i+1) % 4 == 0) {
-          echo '</div><div class="row">';
+<br>
+
+<!-- Page Content -->
+<div class="container">
+  <!-- Page Heading -->
+  <div class="row">
+    <div class="col-lg-12">
+      <h1 class="page-header">Results
+        <small>JSON Structure Tree</small>
+      </h1>
+    </div>
+  </div>
+
+  <?php
+  if (isset($_SESSION['deals'])){
+    echo '<div class="centered-rows">';
+    echo '<div class="row">';
+    for ($i = 0; $i < count($_SESSION['deals']); $i++) {
+      $deal = $_SESSION['deals'][$i];
+      echo '<div class="col col-md-3 col-sm-6 col-xs-12 result-item"><p>'.$deal->id.'</p>'
+      .'<p>'.$deal->name.'</p>'.'<p>'.$deal->time.'</p></div>';
+      if (($i+1) % 4 == 0) {
+        echo '</div><div class="row">';
+      }
+    }
+    echo '</div></div>';
+  }
+  ?>
+  <?php
+  if (isset($_SESSION['fkeys'])){
+    $foundKeys=$_SESSION['fkeys'];
+    $pos = 0;
+    foreach ($foundKeys as $key=>$value){
+      $indent = "";
+      foreach ($value[2] as $k2=>$v2) {
+        if ($v2 == "object"||$v2 == "array"){
+          if ($pos>0) {
+            $indent.="&nbsp&nbsp";
+          }
         }
       }
-      echo '</div></div>';
+      $pos+=1;
+      echo $indent.$key." (".$value[0]."), sample: ".$value[1]."<br>";
     }
-    ?>
+  }
+  ?>
 
-    <hr>
+  <hr>
 
-    <!-- Pagination -->
-    <div class="row text-center">
-      <div class="col-lg-12">
-        <ul class="pagination">
-          <li>
-            <a href="#">&laquo;</a>
-          </li>
-          <li class="active">
-            <a href="#">1</a>
-          </li>
-          <li>
-            <a href="#">&raquo;</a>
-          </li>
-        </ul>
-      </div>
+  <!-- Pagination -->
+  <div class="row text-center">
+    <div class="col-lg-12">
+      <ul class="pagination">
+        <li>
+          <a href="#">&laquo;</a>
+        </li>
+        <li class="active">
+          <a href="#">1</a>
+        </li>
+        <li>
+          <a href="#">&raquo;</a>
+        </li>
+      </ul>
     </div>
-    <!-- /.row -->
-
   </div>
-  <!-- /.container -->
+  <!-- /.row -->
 
-  <!-- jQuery -->
-  <script src="js/jquery.js"></script>
-  <!-- Bootstrap Core JavaScript -->
-  <script src="js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="js/JSONDump.js"></script>
+</div>
+<!-- /.container -->
+
+<!-- jQuery -->
+<script src="js/jquery.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/JSONDump.js"></script>
 </body>
 
 </html>

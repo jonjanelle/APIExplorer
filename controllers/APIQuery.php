@@ -112,11 +112,14 @@ function showKeys() {
   $obj = json_decode($json);
   $foundKeys = [];
   showKeysHelper($obj, $foundKeys,[]);
+  $_SESSION['fkeys']=$foundKeys;
+  header('Location: ../');
+  /*
   $pos = 0;
   foreach ($foundKeys as $key=>$value){
     $indent = "";
     foreach ($value[2] as $k2=>$v2) {
-      if ($v2 == "object"||$v2 == "array"){
+    if ($v2 == "object"||$v2 == "array"){
         if ($pos>0) {
           $indent.="&nbsp&nbsp";
         }
@@ -124,15 +127,8 @@ function showKeys() {
     }
     $pos+=1;
     echo $indent.$key." (".$value[0]."), sample: ".$value[1]."<br>";
-    //echo $indent."Value type: ".$value[0]."<br>";
-    //echo $indent."Value example: ".$value[1]."<br>";
-
-    //echo var_dump($value[2])."<br><br>";
-    //Output indentation: Just count the number of times "array" or "object" in
-    //preceding path, fixed indent per space.
-
-
   }
+  */
 }
 
 function showKeysHelper($data, &$foundKeys, $path)
