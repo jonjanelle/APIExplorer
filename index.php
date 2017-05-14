@@ -23,20 +23,13 @@
         <input type="text" name="api-url" id="api-url" value="https://api.hubapi.com/deals/v1/deal/paged?hapikey=b7e10548-e390-44cf-84bd-554da46342d7&limit=10&properties=dealname&propertiesWithHistory=dealstage" required>
       </div>
       <div class="row">
-        <input class="btn btn-info" type="submit" name="submit" value="Submit">
+        <input class="btn btn-info" type="submit" name="showKeys" value="Inspect Structure">
+        <input class="btn btn-info" type="submit" name="submit" value="Show Cards">
       </div>
     </form>
   </div>
 
   <br>
-  <div class="form-container">
-    <h4>Show all keys?</h4>
-    <form method="POST" action="controllers\APIQuery.php">
-      <div class="row">
-        <input class="btn btn-info" type="submit" name="showKeys" value="Show Keys">
-      </div>
-    </form>
-  </div>
 
   <div class="form-container">
     <h4>Show all keys?</h4>
@@ -73,8 +66,6 @@
       echo '</div></div>';
     }
     ?>
-
-
 
     <hr>
 

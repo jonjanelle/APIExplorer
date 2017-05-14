@@ -105,17 +105,32 @@ function testHelper($currentLevel, $keyPathSet) {
 /////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////
 function showKeys() {
-  $target="https://api.hubapi.com/deals/v1/deal/paged?hapikey=b7e10548-e390-44cf-84bd-554da46342d7&limit=10&properties=dealname&propertiesWithHistory=dealstage";
+  //$target="https://api.hubapi.com/deals/v1/deal/paged?hapikey=b7e10548-e390-44cf-84bd-554da46342d7&limit=10&properties=dealname&propertiesWithHistory=dealstage";
   //$target = "http://api.pathofexile.com/public-stash-tabs";
+  $target = $_POST['api-url'];
   $json = file_get_contents($target);
   $obj = json_decode($json);
   $foundKeys = [];
   showKeysHelper($obj, $foundKeys,[]);
+  $pos = 0;
   foreach ($foundKeys as $key=>$value){
-    echo "Key: ".$key."<br>";
-    echo "Value type: ".$value[0]."<br>";
-    echo "Value example: ".$value[1]."<br>";
-    echo "Path: ".var_dump($value[2])."<br><br>";
+    $indent = "";
+    foreach ($value[2] as $k2=>$v2) {
+      if ($v2 == "object"||$v2 == "array"){
+        if ($pos>0) {
+          $indent.="&nbsp&nbsp";
+        }
+      }
+    }
+    $pos+=1;
+    echo $indent.$key." (".$value[0]."), sample: ".$value[1]."<br>";
+    //echo $indent."Value type: ".$value[0]."<br>";
+    //echo $indent."Value example: ".$value[1]."<br>";
+
+    //echo var_dump($value[2])."<br><br>";
+    //Output indentation: Just count the number of times "array" or "object" in
+    //preceding path, fixed indent per space.
+
 
   }
 }
@@ -133,6 +148,7 @@ function showKeysHelper($data, &$foundKeys, $path)
     }
     if (is_array($value) || is_object($value)) {
       showKeysHelper($value, $foundKeys, $path);
+      break;
     }
   }
 }
