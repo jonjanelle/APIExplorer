@@ -102,7 +102,6 @@ function testHelper($currentLevel, $keyPathSet) {
 /////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////
 
-
 /////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////
 function showKeys() {
@@ -111,26 +110,29 @@ function showKeys() {
   $json = file_get_contents($target);
   $obj = json_decode($json);
   $foundKeys = [];
-  showKeysHelper($obj, $foundKeys);
+  showKeysHelper($obj, $foundKeys,[]);
   foreach ($foundKeys as $key=>$value){
     echo "Key: ".$key."<br>";
     echo "Value type: ".$value[0]."<br>";
-    echo "Value example: ".$value[1]."<br><br>";
+    echo "Value example: ".$value[1]."<br>";
+    echo "Path: ".var_dump($value[2])."<br><br>";
+
   }
 }
 
-function showKeysHelper($data, &$foundKeys)
+function showKeysHelper($data, &$foundKeys, $path)
 {
   foreach ($data as $key=>$value){
     if (!array_key_exists($key, $foundKeys)){
+      $path[$key]=gettype($value);
       if (gettype($value)!="array" && gettype($value)!="object"){
-        $foundKeys[$key]=[gettype($value), $value];
+        $foundKeys[$key]=[gettype($value), $value, $path];
       } else {
-        $foundKeys[$key]=[gettype($value),"N/A"];
+        $foundKeys[$key]=[gettype($value),"N/A",$path];
       }
     }
-    if (gettype($value)=="array" || gettype($value)=="object"){
-      showKeysHelper($value, $foundKeys);
+    if (is_array($value) || is_object($value)) {
+      showKeysHelper($value, $foundKeys, $path);
     }
   }
 }
