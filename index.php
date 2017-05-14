@@ -38,6 +38,15 @@
     </form>
   </div>
 
+  <div class="form-container">
+    <h4>Show all keys?</h4>
+    <form method="POST" action="controllers\APIQuery.php">
+      <div class="row">
+        <input class="btn btn-info" type="submit" name="getKeyValPairs" value="Test Key Value Chain">
+      </div>
+    </form>
+  </div>
+
   <!-- Page Content -->
   <div class="container">
     <!-- Page Heading -->

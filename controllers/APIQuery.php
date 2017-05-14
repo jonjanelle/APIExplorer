@@ -2,6 +2,8 @@
 require('Deal.php');
 session_start();
 
+$varPaths = [];
+
 function processForm() {
   $targetURL = $_POST['api-url'];
   $_SESSION['deals']=array();
@@ -12,6 +14,7 @@ function processForm() {
 
 
 //Query api recursively until hasMore attribute is false.
+//or until depth limit exceeded
 function showAll($targetURL, $depth, $depthLimit)
 {
   $json = file_get_contents($targetURL);
@@ -36,14 +39,72 @@ function showAll($targetURL, $depth, $depthLimit)
     showAll($targetURL, $depth+1, $depthLimit);//do it all again.
   }
 }
-///////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
 
-
-function getKeyValPairs($keyPathSet)
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+function getKeyValPairs()
 {
-  $attrPaths = [[]];
+  $target="https://api.hubapi.com/deals/v1/deal/paged?hapikey=b7e10548-e390-44cf-84bd-554da46342d7&limit=10&properties=dealname&propertiesWithHistory=dealstage";
+  $json = file_get_contents($target);
+  $obj = json_decode($json);
+  //echo count($obj->{"deals"});
+  //First value should be an array or object
+  $keyPathSet = ["deals"=>"array", "NA"=>"object","dealId"=>"int","properties"=>"object", "dealname"=>"object", "value"=>"string","source"=>"string", "sourceId"=>"string", "timestamp"=>"string"];
+
+  //reset($keyPathSet);
+  //$first_key = key($keyPathSet);
+  testHelper($obj, $keyPathSet);
 }
 
+//Attempt to go from keyPathSet to outputting correct fields
+function testHelper($currentLevel, $keyPathSet) {
+  //  echo "<br>".var_dump($keyPathSet)."<br>";
+  if (count($keyPathSet)==0) { return; }
+
+  foreach ($keyPathSet as $key=>$value) {
+    if ($value == "array" && is_object($currentLevel)) { //Should cover deals=>array
+      unset($keyPathSet[$key]);
+      //echo "Moving from ".gettype($currentLevel)." to ".$value."<br>";
+      //echo var_dump($keyPathSet)."<br>";
+      testHelper($currentLevel->{$key},$keyPathSet);
+      break;
+    }
+
+    else if (is_array($currentLevel) && $value=="object"){
+      for ($i=0; $i<count($currentLevel); $i++){
+        unset($keyPathSet[$key]);
+        //echo "Moving from ".gettype($currentLevel)." to ".$value."<br>";
+        //echo var_dump($keyPathSet)."<br>";
+        testHelper($currentLevel[$i],$keyPathSet);
+      }
+      break;
+    }
+
+    else if (is_object($currentLevel)) {
+      if ($value == "object") {
+        unset($keyPathSet[$key]);
+        //echo "Moving from ".gettype($currentLevel)." to ".$value."<br>";
+        //echo var_dump($keyPathSet)."<br>";
+        testHelper($currentLevel->$key, $keyPathSet);
+        break;
+      }
+
+      else if ($value!="array") {
+        echo $key.": ".$currentLevel->$key."<br>";
+        unset($keyPathSet[$key]);
+        if (count($keyPathSet)==0) { echo "<br><br>";}
+      }
+    }
+  }
+}
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
 function showKeys() {
   $target="https://api.hubapi.com/deals/v1/deal/paged?hapikey=b7e10548-e390-44cf-84bd-554da46342d7&limit=10&properties=dealname&propertiesWithHistory=dealstage";
   //$target = "http://api.pathofexile.com/public-stash-tabs";
@@ -73,7 +134,8 @@ function showKeysHelper($data, &$foundKeys)
     }
   }
 }
-
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
 
 //Process form and clear previous data if here after submit click
 if(isset($_POST['submit']))
@@ -85,4 +147,8 @@ if(isset($_POST['submit']))
 if(isset($_POST['showKeys']))
 {
   showKeys();
+}
+
+if(isset($_POST['getKeyValPairs'])){
+  getKeyValPairs();
 }
