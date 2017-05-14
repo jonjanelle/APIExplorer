@@ -1,6 +1,6 @@
 
 <?php
-/*
+
 class Paginator {
   private $_nPerPage;
   private $_total;
@@ -40,4 +40,3 @@ class Paginator {
 
     return $html;
   }
-*/

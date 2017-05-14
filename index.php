@@ -28,6 +28,16 @@
     </form>
   </div>
 
+  <br>
+  <div class="form-container">
+    <h4>Show all keys?</h4>
+    <form method="POST" action="controllers\APIQuery.php">
+      <div class="row">
+        <input class="btn btn-info" type="submit" name="showKeys" value="Show Keys">
+      </div>
+    </form>
+  </div>
+
   <!-- Page Content -->
   <div class="container">
     <!-- Page Heading -->
@@ -45,7 +55,7 @@
       echo '<div class="row">';
       for ($i = 0; $i < count($_SESSION['deals']); $i++) {
         $deal = $_SESSION['deals'][$i];
-        echo '<div class="col-md-3 result-item"><p>'.$deal->id.'</p>'
+        echo '<div class="col col-md-3 col-sm-6 col-xs-12 result-item"><p>'.$deal->id.'</p>'
         .'<p>'.$deal->name.'</p>'.'<p>'.$deal->time.'</p></div>';
         if (($i+1) % 4 == 0) {
           echo '</div><div class="row">';
