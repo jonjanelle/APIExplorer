@@ -12,7 +12,6 @@ function processForm() {
   header('Location: ../');
 }
 
-
 //Query api recursively until hasMore attribute is false.
 //or until depth limit exceeded
 function showAll($targetURL, $depth, $depthLimit)
