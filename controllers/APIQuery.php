@@ -113,8 +113,8 @@ function showKeys() {
   $foundKeys = [];
   showKeysHelper($obj, $foundKeys,[]);
   $_SESSION['fkeys']=$foundKeys;
-  header('Location: ../');
-  /*
+
+  $fresult="";
   $pos = 0;
   foreach ($foundKeys as $key=>$value){
     $indent = "";
@@ -125,10 +125,14 @@ function showKeys() {
         }
       }
     }
+    if ($value[0]=="object"||$value[0]=="array") {
+        $indent = substr($indent, 0, count($indent)-11);
+    }
     $pos+=1;
-    echo $indent.$key." (".$value[0]."), sample: ".$value[1]."<br>";
+    $fresult.=$indent.$key." (".$value[0]."), sample: ".$value[1]."<br>";
   }
-  */
+  $_SESSION['fresult']=$fresult;
+  header('Location: ../');
 }
 
 function showKeysHelper($data, &$foundKeys, $path)
