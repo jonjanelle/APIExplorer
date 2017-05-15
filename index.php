@@ -59,12 +59,14 @@
     echo '</div></div>';
   }
   ?>
+
   <?php
   if (isset($_SESSION['fkeys'])){
     $foundKeys=$_SESSION['fkeys'];
     $pos = 0;
     foreach ($foundKeys as $key=>$value){
       $indent = "";
+
       foreach ($value[2] as $k2=>$v2) {
         if ($v2 == "object"||$v2 == "array"){
           if ($pos>0) {
@@ -72,6 +74,10 @@
           }
         }
       }
+      if ($value[0]=="object"||$value[0]=="array") {
+          $indent = substr($indent, 0, count($indent)-11);
+      }
+
       $pos+=1;
       echo $indent.$key." (".$value[0]."), sample: ".$value[1]."<br>";
     }
