@@ -5,3 +5,4 @@
 
 ### To do
 * Allow user to select which attributes should be included in a more detailed summary
+* Complete a php class to facilitate result pagination
